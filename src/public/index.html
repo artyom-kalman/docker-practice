@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>CRUD Table</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div class="container">
+            <h1>CRUD Table with Comments</h1>
+            <form id="commentForm">
+                <input
+                    type="text"
+                    id="commentInput"
+                    placeholder="Enter your comment"
+                    required
+                />
+                <button type="submit">Add Comment</button>
+            </form>
+            <table id="commentTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Comment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table rows will be dynamically generated here -->
+                </tbody>
+            </table>
+        </div>
+
+        <script src="scripts.js"></script>
+    </body>
+</html>
