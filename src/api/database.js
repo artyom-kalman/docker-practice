@@ -1,5 +1,11 @@
-import mongoose from "mongoose";
+import sqlite3 from "sqlite3";
 
-const DB_URI = "mongodb://localhost:27017/commentsDB";
-
-export const connectToDb = () => {};
+export const connectToDb = () => {
+  const db = new sqlite3.Database("../../data/sogaz.db", (error) => {
+    if (error) {
+      console.log("errro connecting to DB");
+      throw error;
+    }
+  });
+  return db;
+};

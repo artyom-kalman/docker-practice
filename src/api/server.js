@@ -34,19 +34,14 @@ app.get("/api/", (req, res) => {
   let data = [];
   console.log("get");
 
-  db.each(
-    "SELECT id, comment FROM data",
-    (err, row) => {
-      if (err) {
-        console.error("Error executing query:", err.message);
-        return;
-      }
-      data.push(row);
-    },
-    () => {
-      res.json(data);
-    },
-  );
+  db.all("SELECT id, comment FROM data", (err, comments) => {
+    if (err) {
+      console.error("Error executing query:", err.message);
+      return;
+    }
+
+    res.json(comments);
+  });
 });
 
 app.post("/api/", (req, res) => {
