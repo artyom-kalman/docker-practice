@@ -75,10 +75,6 @@ app.post("/api/:id/delete", (req, res) => {
       return res.status(500).json({ error: "Failed to delete comment." });
     }
 
-    if (this.changes === 0) {
-      return res.status(404).json({ error: "Comment not found." });
-    }
-
     console.log(`Comment with ID ${id} has been deleted.`);
     return res.json({
       success: true,
