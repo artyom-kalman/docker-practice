@@ -33,15 +33,20 @@ const db = connectToDb();
 app.get("/api/", (req, res) => {
   let data = [];
   console.log("get");
-
-  db.all("SELECT id, comment FROM data", (err, comments) => {
-    if (err) {
-      console.error("Error executing query:", err.message);
-      return;
-    }
-
-    res.json(comments);
-  });
+  db.each(
+    "SELECT id, comment FROM data",
+    (err, row) => {
+      if (err) {
+        console.error("Error executing query:", err.message);
+        return;
+      }
+      console.log(row);
+      data.push(row);
+    },
+    () => {
+      res.json(data);
+    },
+  );
 });
 
 app.post("/api/", (req, res) => {

@@ -1,6 +1,6 @@
-FROM ubuntu:20.04
+FROM alpine:latest
 
-RUN apt-get update && apt-get install -y nodejs npm sqlite3
+RUN apk add --no-cache npm sqlite
 
 RUN mkdir /app
 
@@ -8,7 +8,9 @@ WORKDIR /app
 
 RUN mkdir ./data
 
-COPY /data/sogaz.db ./data
+COPY /data/init.sql ./data
+
+RUN sqlite3 ./data/sogaz.db < ./data/init.sql
 
 COPY /src ./src
 
@@ -16,4 +18,8 @@ WORKDIR /app/src/api
 
 RUN npm install
 
+RUN npm rebuild
+
 EXPOSE 3000
+
+CMD ["npm", "start"]
