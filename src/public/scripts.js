@@ -50,7 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
       method: "POST",
       body: JSON.stringify({ comment: text }),
     })
-      .then((response) => response.json())
       .then(() => fetchComments()) // Refresh the comments table after adding
       .catch((error) => console.error("Error adding comment:", error));
   }
