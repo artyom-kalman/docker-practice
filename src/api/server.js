@@ -59,6 +59,8 @@ app.post("/api/", (req, res) => {
     }
 
     console.log(`A row has been inserted`);
+
+    res.send();
   });
 });
 
@@ -91,22 +93,21 @@ app.post("/api/:id/patch", (req, res) => {
     return res.status(400).json({ error: "Invalid request." });
   }
 
-  db.query(`UPDATE data SET comment = ${comment} WHERE id = ${id}"`, (err) => {
-    if (err) {
-      console.error("Error updating comment: " + err.message);
-      return res.status(500).json({ error: "Failed to update comment." });
-    }
+  db.query(
+    `UPDATE data SET comment = '${comment}' WHERE id = ${id};`,
+    (err) => {
+      if (err) {
+        console.error("Error updating comment: " + err.message);
+        return res.status(500).json({ error: "Failed to update comment." });
+      }
 
-    if (this.changes === 0) {
-      return res.status(404).json({ error: "Comment not found." });
-    }
-
-    console.log(`Comment with ID ${id} has been updated.`);
-    return res.json({
-      success: true,
-      message: `Comment with ID ${id} has been updated.`,
-    });
-  });
+      console.log(`Comment with ID ${id} has been updated.`);
+      return res.json({
+        success: true,
+        message: `Comment with ID ${id} has been updated.`,
+      });
+    },
+  );
 });
 
 app.listen(PORT, () => {

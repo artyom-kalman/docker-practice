@@ -16,9 +16,5 @@ export const connectToDb = () => {
     console.log("Connected to the MySQL database inside Docker!");
   });
 
-  connection.query("SELECT * FROM data;", (error, rows) => {
-    console.log(rows);
-  });
-
   return connection;
 };
