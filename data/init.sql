@@ -1,5 +1,8 @@
+CREATE DATABASE sogaz;
+USE sogaz;
+
 CREATE TABLE data (
-    id INTEGER PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     comment TEXT
 );
 
