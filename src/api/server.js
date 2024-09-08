@@ -31,22 +31,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const db = connectToDb();
 
 app.get("/api/", (req, res) => {
-  let data = [];
   console.log("get");
 
-  db.each(
-    "SELECT id, comment FROM data",
-    (err, row) => {
-      if (err) {
-        console.error("Error executing query:", err.message);
-        return;
-      }
-      data.push(row);
-    },
-    () => {
-      res.json(data);
-    },
-  );
+  db.query("SELECT id, comment FROM data;", (error, rows) => {
+    if (error) {
+      console.error("Error executing query:", error.message);
+      return;
+    }
+
+    res.json(rows);
+  });
 });
 
 app.post("/api/", (req, res) => {
@@ -58,16 +52,13 @@ app.post("/api/", (req, res) => {
     return res.status(400).json({ error: "Comment text is required." });
   }
 
-  const query = "INSERT INTO data (comment) VALUES (?)";
-
-  db.run(query, [newComment], function (err) {
-    if (err) {
-      console.error("Error inserting comment: " + err.message);
+  db.query(`INSERT INTO data (comment) VALUES ('${newComment}');`, (error) => {
+    if (error) {
+      console.error("Error inserting comment: " + error.message);
       return res.status(500).json({ error: "Failed to add comment." });
     }
 
-    console.log(`A row has been inserted with rowid ${this.lastID}`);
-    return res.json({ id: this.lastID, text: newComment }); // Return the new comment with its ID
+    console.log(`A row has been inserted`);
   });
 });
 
@@ -78,10 +69,8 @@ app.post("/api/:id/delete", (req, res) => {
     return res.status(400).json({ error: "Invalid ID provided." });
   }
 
-  const query = "DELETE FROM data WHERE id = ?";
-
-  db.run(query, [id], function (err) {
-    if (err) {
+  db.query(`DELETE FROM data WHERE id = ${id}`, (error) => {
+    if (error) {
       console.error("Error deleting comment: " + err.message);
       return res.status(500).json({ error: "Failed to delete comment." });
     }
@@ -106,9 +95,7 @@ app.post("/api/:id/patch", (req, res) => {
     return res.status(400).json({ error: "Invalid request." });
   }
 
-  const query = "UPDATE data SET comment = ? WHERE id = ?";
-
-  db.run(query, [comment, id], function (err) {
+  db.query(`UPDATE data SET comment = ${comment} WHERE id = ${id}"`, (err) => {
     if (err) {
       console.error("Error updating comment: " + err.message);
       return res.status(500).json({ error: "Failed to update comment." });
