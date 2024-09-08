@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.text());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const db = connectToDb();
+const db = await connectToDb();
 
 app.get("/api/", (req, res) => {
   let data = [];
