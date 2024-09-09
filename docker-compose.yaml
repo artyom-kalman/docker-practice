@@ -1,15 +1,22 @@
 version: "3"
 services:
-  app:
-    build: ./src
-    container_name: node_app
-    restart: always
-    ports:
-      - 3000:3000
-    working_dir: /app
   db:
     build: ./data
     container_name: mysql_db
     restart: always
     ports:
       - 3306:3306
+    volumes:
+      - data:/var/lib/mysql
+  app:
+    build: ./src
+    container_name: node_app
+    depends_on:
+      - db
+    restart: always
+    ports:
+      - 3000:3000
+    environment:
+      MYSQL_HOST: db
+volumes:
+  data:

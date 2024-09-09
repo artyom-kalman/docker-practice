@@ -1,7 +1,7 @@
 import experss from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-
+import mysql from "mysql2";
 import { connectToDb } from "./database.js";
 
 const app = experss();
@@ -27,9 +27,36 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.text());
 app.use(bodyParser.urlencoded({ extended: true }));
+const dbpool = mysql.createPool({
+  host: process.env.MYSQL_HOST || "localhost",
+  port: "3306",
+  user: "root",
+  password: "123",
+  database: "sogaz",
+});
 
-const db = connectToDb();
+let db;
+const attemptConnection = () =>
+  dbpool.getConnection((err, connection) => {
+    if (err) {
+      console.log("error connecting. retrying in 1 sec");
+      setTimeout(attemptConnection, 1000);
+    } else {
+      dbpool.end();
+      db = mysql.createConnection({
+        host: process.env.MYSQL_HOST || "localhost",
+        port: "3306",
+        user: "root",
+        password: "123",
+        database: "sogaz",
+      });
+      db.query("SELECT * FROM data;", (err, rows) => {
+        console.log(rows);
+      });
+    }
+  });
 
+attemptConnection();
 app.get("/api/", (req, res) => {
   console.log("get");
 
