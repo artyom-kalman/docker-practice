@@ -1,19 +1,15 @@
-FROM ubuntu:20.04
+FROM node:20
 
-RUN apt-get update && apt-get install -y nodejs npm sqlite3
+RUN mkdir /src
 
-RUN mkdir /app
+WORKDIR /src
 
-WORKDIR /app
+COPY . ./
 
-RUN mkdir ./data
-
-COPY /data/sogaz.db ./data
-
-COPY /src ./src
-
-WORKDIR /app/src/api
+WORKDIR /src/api
 
 RUN npm install
 
 EXPOSE 3000
+
+CMD ["npm", "start"]
